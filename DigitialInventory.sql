@@ -1,6 +1,6 @@
-Create database DigitialInvetory;
+Create database DigitialInventory;
 
-use DigitialInvetory;
+use DigitialInventory;
 
 Create table if not exists Product(
 ProductName varchar(50) not null,

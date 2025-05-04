@@ -35,8 +35,28 @@ public class DAL {
                 String myName = rs.getString("ProductName");
                 int myAST = rs.getInt("AmountStorage");
                 int myASH = rs.getInt("AmountShelf");
-                System.out.println("ProductName:" + myName + ", Storage:" + myAST + ", Shelf" + myASH);
+                System.out.println("ProductName:" + myName + ", Storage:" + myAST + ", Shelf:" + myASH);
             }
+
+        } catch (SQLException myException) {
+            System.out.println("Failed to execute stored procedure:" + myException.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public boolean updateProduct(String user, String password, String name, int stAmount, int shAmount) {
+        Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
+        if (myConnection == null) {
+            System.out.println("Failed to obstain a valid connection. Stored procedure could not be run");
+            return false;
+        }
+        try {
+            CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call UpdateProduct(?,?,?)}");
+            myStoredProcedureCall.setString(1, name);
+            myStoredProcedureCall.setInt(2, stAmount);
+            myStoredProcedureCall.setInt(3, shAmount);
+            myStoredProcedureCall.executeQuery();
 
         } catch (SQLException myException) {
             System.out.println("Failed to execute stored procedure:" + myException.getMessage());

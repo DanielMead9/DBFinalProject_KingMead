@@ -29,6 +29,46 @@ public class PresentationLayer {
                         "Failed to connect to the database. Renter Username and Password and ensure you have the DigitalInventory Database. Enter -1 to close");
             }
         }
+
+        while (choice != -1) {
+            System.out.println("Options \n1.Display Products\n2.Edit Product Amounts\n3.Input total Sales for Day\n4.");
+
+            System.out.println("What would you like to do? (input a number): ");
+            choice = sc.nextInt();
+            System.out.println();
+
+            switch (choice) {
+                case 1:
+                    bl.displayProducts();
+                    break;
+
+                case 2:
+
+                    break;
+
+                case 3:
+
+                    break;
+
+                case 4:
+
+                    break;
+
+                case 5:
+
+                    break;
+
+                case 6:
+
+                    break;
+
+                case 7:
+
+                    break;
+            }
+
+            System.out.println();
+        }
     }
 
 }

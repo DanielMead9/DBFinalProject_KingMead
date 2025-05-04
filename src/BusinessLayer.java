@@ -11,15 +11,17 @@ public class BusinessLayer {
         this.userName = un;
         this.password = pw;
         success = dal.ensureConnection("DigitalInventory", userName, password);
-        System.out.println(userName);
-        System.out.println(password);
         return success;
     }
 
     public void displayProducts() {
-        output.clear();
+        output = new ArrayList<>();
         dal.displayProducts(userName, password, output);
         printData(output);
+    }
+
+    public void updateProduct(String name, int stAmount, int shAmount) {
+        dal.updateProduct(userName, password, name, stAmount, shAmount);
     }
 
     public void printData(ArrayList<String> output) {

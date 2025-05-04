@@ -43,7 +43,16 @@ public class PresentationLayer {
                     break;
 
                 case 2:
+                    sc.nextLine();
+                    System.out.println("What product would you like to update?: ");
+                    String name = sc.nextLine();
+                    System.out.println("How many did you add to storage? (if removed put a negative amount)");
+                    int stAmount = sc.nextInt();
+                    System.out.println("How many did you add to Shelf? (if removed put a negative amount)");
+                    int shAmount = sc.nextInt();
 
+                    System.out.println(name + "|" + stAmount + "|" + shAmount);
+                    bl.updateProduct(name, stAmount, shAmount);
                     break;
 
                 case 3:

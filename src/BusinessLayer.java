@@ -5,6 +5,7 @@ public class BusinessLayer {
     private String userName = "";
     private String password = "";
     private boolean success = false;
+    private ArrayList<String> output = new ArrayList<>();
 
     public boolean checkConnection(String un, String pw) {
         this.userName = un;
@@ -13,6 +14,12 @@ public class BusinessLayer {
         System.out.println(userName);
         System.out.println(password);
         return success;
+    }
+
+    public void displayProducts() {
+        output.clear();
+        dal.displayProducts(userName, password, output);
+        printData(output);
     }
 
     public void printData(ArrayList<String> output) {

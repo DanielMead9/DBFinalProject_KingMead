@@ -65,4 +65,37 @@ public class DAL {
         return true;
     }
 
+    public boolean checkout(String user, String password, String[] items, int[] nI, double type, double revenue,
+            ArrayList<Double> temp, double total) {
+        Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
+        if (myConnection == null) {
+            System.out.println("Failed to obstain a valid connection. Stored procedure could not be run");
+            return false;
+        }
+        try {
+            for (int i = 0; i < items.length; i++) {
+                CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call GetSingleProduct(?)}");
+                myStoredProcedureCall.setString(1, items[i]);
+                ResultSet rs = myStoredProcedureCall.executeQuery();
+
+                while (rs.next()) {
+                    type = type + rs.getInt("SellPrice") * nI[i];
+                    revenue = revenue + rs.getInt("SellPrice") * nI[i] - rs.getInt("CostPrice") * nI[i];
+                    total = total + rs.getInt("SellPrice") * nI[i];
+                    updateProduct(user, password, items[i], 0, -nI[i]);
+                }
+
+            }
+
+            temp.add(type);
+            temp.add(revenue);
+            temp.add(total);
+
+        } catch (SQLException myException) {
+            System.out.println("Failed to execute stored procedure:" + myException.getMessage());
+            return false;
+        }
+        return true;
+    }
+
 }

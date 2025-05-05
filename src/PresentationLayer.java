@@ -31,7 +31,7 @@ public class PresentationLayer {
         }
 
         while (choice != -1) {
-            System.out.println("Options \n1.Display Products\n2.Edit Product Amounts\n3.Sell Items\n4.");
+            System.out.println("\nOptions \n1.Display Products\n2.Edit Product Amounts\n3.Sell Items\n4.");
 
             System.out.println("What would you like to do? (input a number): ");
             choice = sc.nextInt();
@@ -90,7 +90,6 @@ public class PresentationLayer {
                     break;
             }
 
-            System.out.println();
         }
     }
 

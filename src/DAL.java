@@ -66,26 +66,30 @@ public class DAL {
     }
 
     public boolean checkout(String user, String password, String[] items, int[] nI, double type, double revenue,
-            ArrayList<Double> temp, double total) {
+            ArrayList<Double> temp, double total, String output) {
         Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
         if (myConnection == null) {
             System.out.println("Failed to obstain a valid connection. Stored procedure could not be run");
             return false;
         }
         try {
+            System.out.println("----------------------------------");
             for (int i = 0; i < items.length; i++) {
                 CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call GetSingleProduct(?)}");
                 myStoredProcedureCall.setString(1, items[i]);
                 ResultSet rs = myStoredProcedureCall.executeQuery();
 
                 while (rs.next()) {
-                    type = type + rs.getInt("SellPrice") * nI[i];
-                    revenue = revenue + rs.getInt("SellPrice") * nI[i] - rs.getInt("CostPrice") * nI[i];
-                    total = total + rs.getInt("SellPrice") * nI[i];
+                    type = type + rs.getDouble("SellPrice") * nI[i];
+                    revenue = revenue + rs.getDouble("SellPrice") * nI[i] - rs.getDouble("CostPrice") * nI[i];
+                    total = total + rs.getDouble("SellPrice") * nI[i];
                     updateProduct(user, password, items[i], 0, -nI[i]);
+                    System.out.printf("%s $%4.2f x%2d %n", items[i], rs.getDouble("SellPrice"), nI[i]);
                 }
 
             }
+            System.out.println("----------------------------------");
+            System.out.printf("Total: $%.2f", total);
 
             temp.add(type);
             temp.add(revenue);

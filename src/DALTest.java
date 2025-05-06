@@ -38,7 +38,7 @@ public class DALTest {
 
     @Test
     public void testCheckout() {
-        boolean result = dal.checkout(null, null, null, null, 0, 0, null, 0, null);
+        boolean result = dal.checkout(null, null, null, null, 0, 0, null, 0);
         assertFalse("Test expects success, false was returned", result);
     }
 

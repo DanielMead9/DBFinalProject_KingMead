@@ -51,7 +51,6 @@ public class PresentationLayer {
                     System.out.println("How many did you add to Shelf? (if removed put a negative amount)");
                     int shAmount = sc.nextInt();
 
-                    System.out.println(name + "|" + stAmount + "|" + shAmount);
                     bl.updateProduct(name, stAmount, shAmount);
                     break;
 
@@ -71,6 +70,7 @@ public class PresentationLayer {
                     System.out.println("Payment Type (Cash or Card): ");
                     String type = sc.next();
                     bl.checkout(items, numItems, type);
+                    System.out.println();
                     break;
 
                 case 4:

@@ -66,7 +66,7 @@ public class DAL {
     }
 
     public boolean checkout(String user, String password, String[] items, int[] nI, double type, double revenue,
-            ArrayList<Double> temp, double total, String output) {
+            ArrayList<Double> temp, double total) {
         Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
         if (myConnection == null) {
             System.out.println("Failed to obstain a valid connection. Stored procedure could not be run");

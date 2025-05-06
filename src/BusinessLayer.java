@@ -30,13 +30,12 @@ public class BusinessLayer {
 
     public void checkout(String[] items, int[] nI, String type) {
         total = 0;
-        String output = "";
         ArrayList<Double> temp = new ArrayList<>();
         if (type.equalsIgnoreCase("cash")) {
-            dal.checkout(userName, password, items, nI, cash, revenue, temp, total, output);
+            dal.checkout(userName, password, items, nI, cash, revenue, temp, total);
             cash += temp.get(0);
         } else {
-            dal.checkout(userName, password, items, nI, card, revenue, temp, total, output);
+            dal.checkout(userName, password, items, nI, card, revenue, temp, total);
             card += temp.get(0);
         }
         revenue += temp.get(1);

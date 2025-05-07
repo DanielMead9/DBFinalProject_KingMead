@@ -21,3 +21,22 @@ SupplierName varchar(50),
 ProductName varchar(50),
 Foreign Key (SupplierName) references Supplier(SupplierName),
 Foreign Key (ProductName) references Product(ProductName));
+
+Create table if not exists Buyer(
+BuyerName varchar(100) not null, 
+BuyerLocation varchar(100),
+BuyerPhone varchar(20),
+BuyerEmail varchar(100),
+Primary Key (BuyerName));
+
+CREATE TABLE IF NOT EXISTS LargeOrderLog (
+    LogID INT AUTO_INCREMENT PRIMARY KEY,
+    BuyerName VARCHAR(100),
+    ProductName VARCHAR(50),
+    Quantity INT,
+    OrderDate DATETIME,
+    FOREIGN KEY (BuyerName) REFERENCES Buyer(BuyerName),
+    FOREIGN KEY (ProductName) REFERENCES Product(ProductName)
+);
+
+

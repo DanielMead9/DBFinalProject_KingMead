@@ -7,7 +7,6 @@ ProductName varchar(50) not null,
 ProductType varchar(20) not null,
 SellPrice double(5,2) not null,
 CostPrice double(5,2) not null,
-AisleNum int,
 AmountStorage int,
 AmountShelf int,
 Primary Key (ProductName));

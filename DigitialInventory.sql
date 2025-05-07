@@ -11,17 +11,6 @@ AmountStorage int,
 AmountShelf int,
 Primary Key (ProductName));
 
-Create table if not exists Supplier(
-SupplierName varchar(50) not null,
-SupplierLocation varchar(50),
-Primary Key (SupplierName));
-
-Create Table if not exists SupplierMapping(
-SupplierName varchar(50),
-ProductName varchar(50),
-Foreign Key (SupplierName) references Supplier(SupplierName),
-Foreign Key (ProductName) references Product(ProductName));
-
 Create table if not exists Buyer(
 BuyerName varchar(100) not null, 
 BuyerLocation varchar(100),

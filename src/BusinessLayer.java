@@ -43,6 +43,18 @@ public class BusinessLayer {
 
     }
 
+    public void largeOrder(String buyerName, String location, String phone, String email, String[] items, int[] quantities) {
+        if (items == null || quantities == null || items.length != quantities.length || items.length == 0) {
+            System.out.println("Invalid order data.");
+            return;
+        }
+    
+        // Process the large order
+        dal.processLargeOrder(userName, password, buyerName, location, phone, email, items, quantities);
+    
+        System.out.println("Order has been successfully processed for: " + buyerName);
+    }
+
     public void printData(ArrayList<String> output) {
         for (int i = 0; i < output.size(); i++) {
             System.out.println(output.get(i));

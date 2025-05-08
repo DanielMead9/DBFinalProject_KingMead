@@ -114,11 +114,25 @@ public class DAL {
         }
 
         try {
+
+            CallableStatement BuyCall = myConnection.prepareCall("{Call InsertOrUpdateBuyer(?, ?, ?, ?)}");
+            BuyCall.setString(1, buyerName);
+            BuyCall.setString(2, location);
+            BuyCall.setString(3, phone);
+            BuyCall.setString(4, email);
+            BuyCall.execute();
+
             for (int i = 0; i < items.length; i++) {
                 CallableStatement updateCall = myConnection.prepareCall("{Call UpdateStorageOnly(?, ?)}");
                 updateCall.setString(1, items[i]);
                 updateCall.setInt(2, -quantities[i]);
                 updateCall.execute();
+
+                CallableStatement logCall = myConnection.prepareCall("{Call LogLargeOrder(?, ?, ?)}");
+                logCall.setString(1, buyerName);
+                logCall.setString(2, items[i]);
+                logCall.setInt(3, quantities[i]);
+                logCall.execute();
 
                 CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call GetSingleProduct(?)}");
                 myStoredProcedureCall.setString(1, items[i]);
@@ -136,13 +150,6 @@ public class DAL {
             temp.add(type);
             temp.add(revenue);
             temp.add(total);
-
-            CallableStatement logCall = myConnection.prepareCall("{Call LogLargeOrder(?, ?, ?, ?)}");
-            logCall.setString(1, buyerName);
-            logCall.setString(2, location);
-            logCall.setString(3, phone);
-            logCall.setString(4, email);
-            logCall.execute();
 
             System.out.println("Large order processed and logged successfully.");
             return true;

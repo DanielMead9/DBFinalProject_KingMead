@@ -82,12 +82,13 @@ public class BusinessLayer {
             return;
         }
         ArrayList<Double> temp = new ArrayList<>();
-        card += temp.get(0);
-        profit += temp.get(1);
-        total = temp.get(2);
 
         // Process the large order
         dal.processLargeOrder(userName, password, buyerName, location, phone, email, items, quantities, temp);
+
+        card += temp.get(0);
+        profit += temp.get(1);
+        total = temp.get(2);
 
         System.out.println("Order has been successfully processed for: " + buyerName);
     }
@@ -95,7 +96,8 @@ public class BusinessLayer {
     public void restockLowShelfItems(int threshold) {
         try {
             // Get low stock products
-            Connection conn = DriverManager.getConnection("DigitalInventory", userName, password);
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/DigitalInventory", userName,
+                    password);
             CallableStatement stmt = conn.prepareCall("{CALL GetLowShelfStock(?)}");
             stmt.setInt(1, threshold);
             ResultSet rs = stmt.executeQuery();

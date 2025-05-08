@@ -31,7 +31,8 @@ public class PresentationLayer {
         }
 
         while (choice != -1) {
-            System.out.println("\nOptions \n1.Display Products\n2.Checkout\n3.Display Profit\n4.");
+            System.out.println(
+                    "\nOptions \n1.Display Products\n2.Checkout\n3.Display Profit\n4.Create Large Order\n5. \n6.Update Product amount");
 
             System.out.println("-1.Quit \nWhat would you like to do? (input a number): ");
             choice = sc.nextInt();
@@ -74,7 +75,15 @@ public class PresentationLayer {
                     break;
 
                 case 6:
+                    sc.nextLine();
+                    System.out.println("What product would you like to update?: ");
+                    String name = sc.nextLine();
+                    System.out.println("How many did you add to storage? (if removed put a negative amount)");
+                    int stAmount = sc.nextInt();
+                    System.out.println("How many did you add to Shelf? (if removed put a negative amount)");
+                    int shAmount = sc.nextInt();
 
+                    bl.updateProduct(name, stAmount, shAmount);
                     break;
 
                 case 7:

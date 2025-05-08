@@ -134,7 +134,6 @@ public class DAL {
         }
     }
 
-
     public double getSpent(String user, String password) {
         Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
         if (myConnection == null) {
@@ -159,6 +158,7 @@ public class DAL {
             return -1;
         }
 
+    }
 
     public boolean restockProduct(String user, String password, String name, int quantity) {
         Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
@@ -166,20 +166,20 @@ public class DAL {
             System.out.println("Failed to get connection. Restock aborted.");
             return false;
         }
-    
+
         try {
             // First, check if there's enough in storage
             CallableStatement checkCall = myConnection.prepareCall("{CALL GetSingleProduct(?)}");
             checkCall.setString(1, name);
             ResultSet rs = checkCall.executeQuery();
-    
+
             if (rs.next()) {
                 int availableStorage = rs.getInt("AmountStorage");
                 if (availableStorage < quantity) {
                     System.out.println("Not enough in storage to restock.");
                     return false;
                 }
-    
+
                 // Now move from storage to shelf using existing UpdateProduct
                 return updateProduct(user, password, name, -quantity, quantity);
             }
@@ -188,6 +188,30 @@ public class DAL {
             return false;
         }
         return false;
+
+    }
+
+    public double getPrice(String user, String password, String name) {
+        Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
+        if (myConnection == null) {
+            System.out.println("Failed to obstain a valid connection. Stored procedure could not be run");
+        }
+        try {
+
+            CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call GetSingleProduct(?)}");
+            myStoredProcedureCall.setString(1, name);
+            ResultSet rs = myStoredProcedureCall.executeQuery();
+
+            while (rs.next()) {
+                double myCost = rs.getDouble("CostPrice");
+                return myCost;
+            }
+            return -1;
+
+        } catch (SQLException myException) {
+            System.out.println("Failed to execute stored procedure:" + myException.getMessage());
+            return -1;
+        }
 
     }
 

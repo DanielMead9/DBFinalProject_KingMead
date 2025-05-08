@@ -32,6 +32,10 @@ public class BusinessLayer {
     }
 
     public void updateProduct(String name, int stAmount, int shAmount) {
+        if (stAmount > 0) {
+            double cost = dal.getPrice(userName, password, name);
+            amountSpent += cost * stAmount;
+        }
         dal.updateProduct(userName, password, name, stAmount, shAmount);
     }
 
@@ -85,37 +89,37 @@ public class BusinessLayer {
     }
 
     public void restockLowShelfItems(int threshold) {
-    try {
-        // Get low stock products
-        Connection conn = DriverManager.getConnection("DigitalInventory", userName, password);
-        CallableStatement stmt = conn.prepareCall("{CALL GetLowShelfStock(?)}");
-        stmt.setInt(1, threshold);
-        ResultSet rs = stmt.executeQuery();
+        try {
+            // Get low stock products
+            Connection conn = DriverManager.getConnection("DigitalInventory", userName, password);
+            CallableStatement stmt = conn.prepareCall("{CALL GetLowShelfStock(?)}");
+            stmt.setInt(1, threshold);
+            ResultSet rs = stmt.executeQuery();
 
-        Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);
 
-        while (rs.next()) {
-            String name = rs.getString("ProductName");
-            int shelf = rs.getInt("AmountShelf");
-            int storage = rs.getInt("AmountStorage");
+            while (rs.next()) {
+                String name = rs.getString("ProductName");
+                int shelf = rs.getInt("AmountShelf");
+                int storage = rs.getInt("AmountStorage");
 
-            System.out.printf("Product: %s | Shelf: %d | Storage: %d%n", name, shelf, storage);
-            System.out.print("Enter amount to restock from storage to shelf (0 to skip): ");
-            int amount = scanner.nextInt();
+                System.out.printf("Product: %s | Shelf: %d | Storage: %d%n", name, shelf, storage);
+                System.out.print("Enter amount to restock from storage to shelf (0 to skip): ");
+                int amount = scanner.nextInt();
 
-            if (amount > 0) {
-                boolean success = dal.restockProduct(userName, password, name, amount);
-                if (success) {
-                    System.out.println("Restocked successfully.");
-                } else {
-                    System.out.println("Failed to restock. Maybe not enough in storage.");
+                if (amount > 0) {
+                    boolean success = dal.restockProduct(userName, password, name, amount);
+                    if (success) {
+                        System.out.println("Restocked successfully.");
+                    } else {
+                        System.out.println("Failed to restock. Maybe not enough in storage.");
+                    }
                 }
             }
+        } catch (Exception e) {
+            System.out.println("Error in restocking workflow: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("Error in restocking workflow: " + e.getMessage());
     }
-}
 
     public void printData(ArrayList<String> output) {
         for (int i = 0; i < output.size(); i++) {

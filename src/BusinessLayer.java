@@ -81,9 +81,13 @@ public class BusinessLayer {
             System.out.println("Invalid order data.");
             return;
         }
+        ArrayList<Double> temp = new ArrayList<>();
+        card += temp.get(0);
+        profit += temp.get(1);
+        total = temp.get(2);
 
         // Process the large order
-        dal.processLargeOrder(userName, password, buyerName, location, phone, email, items, quantities);
+        dal.processLargeOrder(userName, password, buyerName, location, phone, email, items, quantities, temp);
 
         System.out.println("Order has been successfully processed for: " + buyerName);
     }

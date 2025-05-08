@@ -134,6 +134,7 @@ public class DAL {
         }
     }
 
+
     public double getSpent(String user, String password) {
         Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
         if (myConnection == null) {
@@ -157,6 +158,36 @@ public class DAL {
             System.out.println("Failed to execute stored procedure:" + myException.getMessage());
             return -1;
         }
+
+
+    public boolean restockProduct(String user, String password, String name, int quantity) {
+        Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
+        if (myConnection == null) {
+            System.out.println("Failed to get connection. Restock aborted.");
+            return false;
+        }
+    
+        try {
+            // First, check if there's enough in storage
+            CallableStatement checkCall = myConnection.prepareCall("{CALL GetSingleProduct(?)}");
+            checkCall.setString(1, name);
+            ResultSet rs = checkCall.executeQuery();
+    
+            if (rs.next()) {
+                int availableStorage = rs.getInt("AmountStorage");
+                if (availableStorage < quantity) {
+                    System.out.println("Not enough in storage to restock.");
+                    return false;
+                }
+    
+                // Now move from storage to shelf using existing UpdateProduct
+                return updateProduct(user, password, name, -quantity, quantity);
+            }
+        } catch (SQLException e) {
+            System.out.println("Restock failed: " + e.getMessage());
+            return false;
+        }
+        return false;
 
     }
 

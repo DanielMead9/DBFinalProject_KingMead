@@ -87,4 +87,14 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS GetLowShelfStock;
+DELIMITER $$
+CREATE PROCEDURE GetLowShelfStock(IN threshold INT)
+BEGIN
+    SELECT *
+    FROM Product
+    WHERE AmountShelf < threshold;
+END $$
+DELIMITER ;
+
 

@@ -103,8 +103,11 @@ public class DAL {
     }
 
     public boolean processLargeOrder(String user, String password, String buyerName, String location, String phone,
-            String email, String[] items, int[] quantities) {
+            String email, String[] items, int[] quantities, ArrayList<Double> temp) {
         Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
+        double type = 0;
+        double revenue = 0;
+        double total = 0;
         if (myConnection == null) {
             System.out.println("Failed to obtain a valid connection. Stored procedure could not be run.");
             return false;
@@ -116,7 +119,23 @@ public class DAL {
                 updateCall.setString(1, items[i]);
                 updateCall.setInt(2, -quantities[i]);
                 updateCall.execute();
+
+                CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call GetSingleProduct(?)}");
+                myStoredProcedureCall.setString(1, items[i]);
+                ResultSet rs = myStoredProcedureCall.executeQuery();
+
+                while (rs.next()) {
+                    type = type + rs.getDouble("SellPrice") * quantities[i];
+                    revenue = revenue + rs.getDouble("SellPrice") * quantities[i]
+                            - rs.getDouble("CostPrice") * quantities[i];
+                    total = total + rs.getDouble("SellPrice") * quantities[i];
+                }
+
             }
+
+            temp.add(type);
+            temp.add(revenue);
+            temp.add(total);
 
             CallableStatement logCall = myConnection.prepareCall("{Call LogLargeOrder(?, ?, ?, ?)}");
             logCall.setString(1, buyerName);

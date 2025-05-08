@@ -96,7 +96,8 @@ public class BusinessLayer {
     public void restockLowShelfItems(int threshold) {
         try {
             // Get low stock products
-            Connection conn = DriverManager.getConnection("DigitalInventory", userName, password);
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/DigitalInventory", userName,
+                    password);
             CallableStatement stmt = conn.prepareCall("{CALL GetLowShelfStock(?)}");
             stmt.setInt(1, threshold);
             ResultSet rs = stmt.executeQuery();

@@ -35,7 +35,7 @@ public class DAL {
                 String myName = rs.getString("ProductName");
                 int myAST = rs.getInt("AmountStorage");
                 int myASH = rs.getInt("AmountShelf");
-                System.out.println("ProductName:" + myName + ", Storage:" + myAST + ", Shelf:" + myASH);
+                System.out.println("Product Name: " + myName + ", Storage: " + myAST + ", Shelf: " + myASH);
             }
 
         } catch (SQLException myException) {
@@ -102,38 +102,62 @@ public class DAL {
         return true;
     }
 
-    public boolean processLargeOrder(String user, String password, String buyerName, String location, String phone, String email, String[] items, int[] quantities) {
+    public boolean processLargeOrder(String user, String password, String buyerName, String location, String phone,
+            String email, String[] items, int[] quantities) {
         Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
         if (myConnection == null) {
             System.out.println("Failed to obtain a valid connection. Stored procedure could not be run.");
             return false;
         }
-    
+
         try {
             for (int i = 0; i < items.length; i++) {
                 CallableStatement updateCall = myConnection.prepareCall("{Call UpdateStorageOnly(?, ?)}");
                 updateCall.setString(1, items[i]);
-                updateCall.setInt(2, -quantities[i]); 
+                updateCall.setInt(2, -quantities[i]);
                 updateCall.execute();
             }
-    
+
             CallableStatement logCall = myConnection.prepareCall("{Call LogLargeOrder(?, ?, ?, ?)}");
             logCall.setString(1, buyerName);
             logCall.setString(2, location);
             logCall.setString(3, phone);
             logCall.setString(4, email);
             logCall.execute();
-    
+
             System.out.println("Large order processed and logged successfully.");
             return true;
-    
+
         } catch (SQLException myException) {
             System.out.println("Failed to execute large order procedure: " + myException.getMessage());
             return false;
         }
     }
-    
 
+    public double getSpent(String user, String password) {
+        Connection myConnection = getMySQLConnection("DigitalInventory", user, password);
+        if (myConnection == null) {
+            System.out.println("Failed to obstain a valid connection. Stored procedure could not be run");
+        }
+        try {
+            double spent = 0;
+            CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call GetProducts()}");
+            ResultSet rs = myStoredProcedureCall.executeQuery();
 
+            while (rs.next()) {
+                double myCost = rs.getDouble("CostPrice");
+                int myAST = rs.getInt("AmountStorage");
+                int myASH = rs.getInt("AmountShelf");
+                spent += myCost * (myASH + myAST);
+            }
+
+            return spent;
+
+        } catch (SQLException myException) {
+            System.out.println("Failed to execute stored procedure:" + myException.getMessage());
+            return -1;
+        }
+
+    }
 
 }

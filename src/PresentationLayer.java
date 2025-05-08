@@ -32,7 +32,7 @@ public class PresentationLayer {
 
         while (choice != -1) {
             System.out.println(
-                    "\nOptions \n1.Display Products\n2.Checkout\n3.Display Profit\n4.Create Large Order\n5. \n6.Update Product amount");
+                    "\nOptions \n1.Display Products\n2.Checkout\n3.Display Profit\n4.Create Large Order\n5.Restock Shelves \n6.Update Product amount");
 
             System.out.println("-1.Quit \nWhat would you like to do? (input a number): ");
             choice = sc.nextInt();
@@ -67,11 +67,39 @@ public class PresentationLayer {
                     break;
 
                 case 4:
+                sc.nextLine(); // Consume the newline
+                    System.out.println("Enter Buyer's Name: ");
+                    String buyerName = sc.nextLine();
+                    System.out.println("Enter Location: ");
+                    String location = sc.nextLine();
+                    System.out.println("Enter Phone: ");
+                    String phone = sc.nextLine();
+                    System.out.println("Enter Email: ");
+                    String email = sc.nextLine();
+
+                    System.out.println("How many different items are in the order?");
+                    int itemCount = sc.nextInt();
+                    sc.nextLine(); // Consume newline
+
+                    String[] largeOrderItems = new String[itemCount];
+                    int[] quantities = new int[itemCount];
+
+                    for (int i = 0; i < itemCount; i++) {
+                        System.out.println("Item " + (i + 1) + " name: ");
+                        largeOrderItems[i] = sc.nextLine();
+                        System.out.println("Quantity for " + largeOrderItems[i] + ": ");
+                        quantities[i] = sc.nextInt();
+                        sc.nextLine(); // Consume newline
+                    }
+
+                    bl.largeOrder(buyerName, location, phone, email, largeOrderItems, quantities);
 
                     break;
 
                 case 5:
-
+                 System.out.println("Enter the threshold for low stock items: ");
+                    int threshold = sc.nextInt();
+                    bl.restockLowShelfItems(threshold);
                     break;
 
                 case 6:

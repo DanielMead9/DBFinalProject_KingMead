@@ -28,4 +28,3 @@ CREATE TABLE IF NOT EXISTS LargeOrderLog (
     FOREIGN KEY (ProductName) REFERENCES Product(ProductName)
 );
 
-
